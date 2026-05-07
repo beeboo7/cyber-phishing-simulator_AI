@@ -1,6 +1,3 @@
-
-from urllib import response
-
 import ollama
 import dotenv 
 import os
