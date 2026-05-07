@@ -1,7 +1,10 @@
 
+from urllib import response
+
 import ollama
 import dotenv 
 import os
+import json
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,7 +15,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://localhost:5173"],
+    allow_origins=["https://localhost:5173", "http://localhost:4200"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -51,13 +54,21 @@ def generate_feedback(body: FeedbackRequest):
             f"Scenario shown to learner:\n{scenario_content}"
             f"Correct action they should have taken:\n{correct_action}"
             f"Learner's response:\n{learner_answer}"
-            "Provide feedback with the following clearly labeled sections:\n"
-            "- Score: (a number from 0 to 100)\n"
-            "- Explanation: (2-3 sentences on what they got right or wrong)\n"
-            "- Tips: (2-3 bullet points of actionable advice)\n"
-            "- Red Flags Missed: (bullet list of warning signs they overlooked)\n\n"
+            "Return ONLY valid JSON in this exact structure:\n"
+            "{\n"
+            '  "score": number,\n'
+            '  "explanation": "string",\n'
+            '  "tips": ["string"],\n'
+            '  "redFlagsMissed": ["string"]\n'
+            "}\n\n"
+            "Do not include markdown, code blocks or extra text."
             "Do not provide any additional commentary beyond these sections."
         )} 
     ])
 
-    return {"feedback": response.message.content}
+    raw_content = response.message.content
+
+    print(raw_content)
+
+    cleaned = raw_content.replace("```json", "").replace("```", "").strip()
+    return json.loads(cleaned)
