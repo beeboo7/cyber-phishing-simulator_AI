@@ -24,7 +24,7 @@ Prints a generated phishing email scenario with red flags to the console.
 
 ### Run the feedback API
 ```
-uvicorn AI_Feedback_Generation:app --reload
+python -m uvicorn AI_Feedback_Generation:app --reload
 ```
 Starts a FastAPI server exposing a `/feedback` endpoint.
 
@@ -46,7 +46,12 @@ Evaluates a learner's response to a phishing scenario.
 
 **Response:**
 ```json
-{ "feedback": "string" }
+{
+  "score": 0,
+  "explanation": "string",
+  "tips": ["string"],
+  "redFlagsMissed": ["string"]
+}
 ```
 
 Feedback includes a score (0-100), explanation, tips, and red flags missed.
