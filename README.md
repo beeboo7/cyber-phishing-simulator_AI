@@ -16,11 +16,11 @@ AI-powered phishing simulation tool for cybersecurity awareness training. Uses O
 
 ## Usage
 
-### Generate a phishing scenario
+### Run the scenario API
 ```
-python AI_Scenario_Generation.py
+python -m uvicorn AI_Scenario_Generation:app --reload
 ```
-Prints a generated phishing email scenario with red flags to the console.
+Starts a FastAPI server exposing a `/scenario` endpoint.
 
 ### Run the feedback API
 ```
@@ -29,6 +29,20 @@ python -m uvicorn AI_Feedback_Generation:app --reload
 Starts a FastAPI server exposing a `/feedback` endpoint.
 
 ## API
+
+### `GET /scenario`
+Generates a phishing email scenario for security awareness training.
+
+**Response:**
+```json
+{
+  "sender": "string",
+  "recipient": "string",
+  "subject": "string",
+  "emailBody": "string",
+  "redFlags": ["string"]
+}
+```
 
 ### `POST /feedback`
 Evaluates a learner's response to a phishing scenario.
