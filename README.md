@@ -20,7 +20,7 @@ AI-powered phishing simulation tool for cybersecurity awareness training. Uses O
 ```
 python -m uvicorn AI_Scenario_Generation:app --reload
 ```
-Starts a FastAPI server exposing a `/scenario` endpoint.
+Starts a FastAPI server exposing `/simple-scenario` and `/detailed-scenario` endpoints.
 
 ### Run the feedback API
 ```
@@ -30,19 +30,50 @@ Starts a FastAPI server exposing a `/feedback` endpoint.
 
 ## API
 
-### `GET /scenario`
-Generates a phishing email scenario for security awareness training.
+### `GET /simple-scenario`
+Generates a phishing email scenario for security awareness training wit h a single correct/incorrect classification.
 
 **Response:**
 ```json
 {
+  "title": "string",
+  "scenarioDescription": "string",
+  "category": "string",
+  "difficulty": "string",
+  "interactionType": "string",
   "sender": "string",
   "recipient": "string",
   "subject": "string",
   "emailBody": "string",
-  "redFlags": ["string"]
+  "redFlags": ["string"],
+  "correctAnswer": "string",
+  "wrongAnswer": "string"
 }
 ```
+
+The learner's task is to classify the scenario as suspicious or not suspicious, matching correctAnswer.
+
+### `GET /detailed-scenario`
+Generates a more detailed phishing scenario for security awareness training, where the learner must identify specific suspicious elements within the content rather than making a single overall classification.
+
+**Response:**
+```json
+{
+  "title": "string",
+  "scenarioDescription": "string",
+  "category": "string",
+  "difficulty": "string",
+  "interactionType": "string",
+  "sender": "string",
+  "recipient": "string",
+  "subject": "string",
+  "emailBody": "string",
+  "redFlags": ["string"],
+  "neutralFlags": ["string"]
+}
+```
+
+The learner's task is to correctly identify which specific elements of the scenario are genuine indicators of suspicious activity (redFlags), while correctly disregarding elements that look suspicious at first glance but are actually legitimate (neutralFlags, used as distractors).
 
 ### `POST /feedback`
 Evaluates a learner's response to a phishing scenario.
