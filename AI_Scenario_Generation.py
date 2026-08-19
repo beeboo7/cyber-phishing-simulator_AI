@@ -23,8 +23,14 @@ client = ollama.Client(
     headers={"Authorization": f"Bearer {os.getenv('API_KEY')}"}
 )
 
+def random_seed_fragment():
+    consonants = "bcdfghjklmnpqrstvwxz"
+    vowels = "aeiou"
+    return "".join(random.choice(consonants) + random.choice(vowels) for _ in range(2))
+
 @app.get("/simple-scenario")
 def generate_simple_scenario():
+    seed = random_seed_fragment()
     difficulty = random.choice(["Easy", "Medium", "Hard"])
     correct_answer = random.choice(["suspicious", "not suspicious"])
     category = random.choice(["phishing", "smishing", "vishing", "social engineering", "malware", "ransomware", "business email compromise", "spear phishing", "whaling"])
@@ -37,13 +43,18 @@ def generate_simple_scenario():
             f"the correctAnswer field must be exactly '{correct_answer}'. "
             "Make the scenario plausible but clearly educational, ensure all content is fictional and not real. "
             "All names must be entirely fictional. "
-            "Invent fictional company and brand names. "
+            "Do not use common real-world business naming patterns."
+            "Invent fictional links, and phone numbers. "
+            "Sender and recipient email addresses MUST be fictional and not real."
+            f"Invent a fictional company name that incorporates or is inspired by the '{seed}', combined with other invented syllables, so it does not resemble any real business name. "
+            "Before finalising, verify it does not resemble any real existing company, otherwise retry."
             "If the interactionType is Phone Call, Social Media, or Text Message, the scenario should be adapted accordingly. For example, if the interactionType is Phone Call, the scenario should describe a phone call transcript instead of an email and use phone numbers instead of email addresses. "
             f"Set the difficulty field to exactly '{difficulty}'. "
             f"Set the category field to exactly '{category}'. "
             f"Set the interactionType field to exactly '{interactionType}'. "
             "Answers should be one word: suspicious or not suspicious. "
             "Return ONLY valid JSON in this exact structure:\n"
+            "Return redFlags as how they appear in the scenario word for word."
             "{\n"
             '  "title": "string",\n'
             '  "scenarioDescription": "string",\n'
@@ -79,13 +90,18 @@ def generate_detailed_scenario():
     difficulty = random.choice(["Easy", "Medium", "Hard"])
     category = random.choice(["phishing", "smishing", "vishing", "social engineering", "malware", "ransomware", "business email compromise", "spear phishing", "whaling"])
     interactionType = random.choice(["Email", "Text Message", "Phone Call", "Social Media"])
+    seed = random_seed_fragment()
 
     response = client.chat(model="gemma4", messages=[
         {"role": "user", "content": (
             f"Generate a {difficulty} difficulty phishing scenario for security awareness training. "
             "Make the scenario plausible but clearly educational, ensure all content is fictional and not real. "
             "All names must be entirely fictional. "
-            "Invent fictional company and brand names instead. "
+            "Do not use common real-world business naming patterns."
+            "Invent fictional links, and phone numbers. "
+            "Sender and recipient email addresses MUST be fictional and not real."
+            f"Invent a fictional company name that incorporates or is inspired by the '{seed}', combined with other invented syllables, so it does not resemble any real business name. "
+            "Before finalising, verify it does not resemble any real existing company, otherwise retry."
             "If the interactionType is Phone Call, Social Media, or Text Message, the scenario should be adapted accordingly. For example, if the interactionType is Phone Call, the scenario should describe a phone call transcript instead of an email and use phone numbers instead of email addresses. "
             f"Set the difficulty field to exactly '{difficulty}'. "
             f"Set the category field to exactly '{category}'. "
