@@ -44,6 +44,7 @@ def generate_simple_scenario():
             f"Set the interactionType field to exactly '{interactionType}'. "
             "Answers should be one word: suspicious or not suspicious. "
             "Return ONLY valid JSON in this exact structure:\n"
+            "Return redFlags and neutralFlags as how they appear in the scenario word for word."
             "{\n"
             '  "title": "string",\n'
             '  "scenarioDescription": "string",\n'
@@ -95,6 +96,7 @@ def generate_detailed_scenario():
             "Both redFlags and neutralFlags must refer to specific, identifiable details actually present in the scenario content (e.g. a specific phrase, link, sender detail, or request), not generic statements. "
             "Include between 2 and 5 redFlags and between 1 and 3 neutralFlags depending on difficulty. "
             "Return ONLY valid JSON in this exact structure:\n"
+            "Return redFlags and neutralFlags as how they appear in the scenario word for word."
             "{\n"
             '  "title": "string",\n'
             '  "scenarioDescription": "string",\n'
