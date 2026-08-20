@@ -16,17 +16,11 @@ AI-powered phishing simulation tool for cybersecurity awareness training. Uses O
 
 ## Usage
 
-### Run the scenario API
+### Run the scenario and feedback API
 ```
-python -m uvicorn AI_Scenario_Generation:app --reload
+python -m uvicorn main:app --reload
 ```
-Starts a FastAPI server exposing `/simple-scenario` and `/detailed-scenario` endpoints.
-
-### Run the feedback API
-```
-python -m uvicorn AI_Feedback_Generation:app --reload
-```
-Starts a FastAPI server exposing a `/feedback` endpoint.
+Starts a FastAPI server exposing `/simple-scenario`, `/detailed-scenario` and `/feedback` endpoints.
 
 ## API
 
