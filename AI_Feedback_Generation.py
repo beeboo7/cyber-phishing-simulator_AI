@@ -40,7 +40,7 @@ def generate_feedback(body: FeedbackRequest):
     learner_answer = next(c.text for c in body.scenario_choices if c.id == body.selected_choice_id)
     scenario_content = body.scenario_content
 
-    response = client.chat(model="gemma3:4b", messages=[
+    response = client.chat(model="gemma4", messages=[
         {"role": "system", "content": (
         "You are a cybersecurity awareness trainer evaluating a learner's response to a phishing simulation. "
         "Be educational, constructive and clear. Never be harsh. "
