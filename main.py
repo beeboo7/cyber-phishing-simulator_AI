@@ -56,6 +56,8 @@ def generate_simple_scenario():
             "Answers should be one word: suspicious or not suspicious. "
             "Return ONLY valid JSON in this exact structure:\n"
             "Return redFlags and neutralFlags as how they appear in the scenario word for word."
+            "Use only plain ASCII characters throughout - no curly/smart quotes, no em dashes or en dashes (use a hyphen instead), no ellipsis character, and no emoji or other special symbols. "
+            "Do not include HTML tags, script tags, or markdown formatting characters anywhere in the field values. "
             "{\n"
             '  "title": "string",\n'
             '  "scenarioDescription": "string",\n'
@@ -113,6 +115,8 @@ def generate_detailed_scenario():
             "Include between 2 and 5 redFlags and between 1 and 3 neutralFlags depending on difficulty. "
             "Return ONLY valid JSON in this exact structure:\n"
             "Return redFlags and neutralFlags as how they appear in the scenario word for word."
+            "Use only plain ASCII characters throughout - no curly/smart quotes, no em dashes or en dashes (use a hyphen instead), no ellipsis character, and no emoji or other special symbols. "
+            "Do not include HTML tags, script tags, or markdown formatting characters anywhere in the field values. "
             "{\n"
             '  "title": "string",\n'
             '  "scenarioDescription": "string",\n'
