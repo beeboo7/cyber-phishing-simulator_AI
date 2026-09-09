@@ -152,6 +152,7 @@ class FeedbackRequest(BaseModel):
     scenario_content: str
     scenario_choices: list[ScenarioChoice] = Field(alias='scenarioChoices')
     selected_choice_id: int = Field(alias='selectedChoiceId')
+    missed_cues: list[str] = Field(default_factory=list, alias='missedCues')
 
 
 @app.post("/feedback")
@@ -159,6 +160,9 @@ def generate_feedback(body: FeedbackRequest):
     correct_action = next(c.text for c in body.scenario_choices if c.isCorrect)
     learner_answer = next(c.text for c in body.scenario_choices if c.id == body.selected_choice_id)
     scenario_content = body.scenario_content
+    missed_cues = body.missed_cues
+
+    missed_cues_str = "\n".join(f"- {cue}" for cue in missed_cues) if missed_cues else "None"
 
     response = client.chat(model="gemma4", messages=[
         {"role": "system", "content": (
@@ -171,12 +175,12 @@ def generate_feedback(body: FeedbackRequest):
             f"Scenario shown to learner:\n{scenario_content}"
             f"Correct action they should have taken:\n{correct_action}"
             f"Learner's response:\n{learner_answer}"
+            f"Missed cues:\n{missed_cues_str}"
             "Return ONLY valid JSON in this exact structure:\n"
             "{\n"
             '  "score": number,\n'
             '  "explanation": "string",\n'
             '  "tips": ["string"],\n'
-            '  "redFlagsMissed": ["string"]\n'
             "}\n\n"
             "Do not include markdown, code blocks or extra text."
             "Do not provide any additional commentary beyond these sections."
